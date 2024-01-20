@@ -181,6 +181,10 @@ docker run --network host --add-host host.docker.internal:host-gateway -i privat
        valid_lft forever preferred_lft forever
 ```
 
+##### Apple Silicon対応
+- `bitnami/mysql`のイメージをベースにdstatなど必要なライブラリをインストールする
+- 詳細は`webapp/etc/mysql/docker/Dockerfile`を見てください
+
 #### Vagrant
 
 手元にansibleをインストールして`vagrant up`すればprovisioningが実行される。
