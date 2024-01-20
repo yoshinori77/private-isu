@@ -182,8 +182,15 @@ docker run --network host --add-host host.docker.internal:host-gateway -i privat
 ```
 
 ##### Apple Silicon対応
-- `bitnami/mysql`のイメージをベースにdstatなど必要なライブラリをインストールする
-- 詳細は`webapp/etc/mysql/docker/Dockerfile`を見てください
+- [mysql公式のDockerイメージ](https://hub.docker.com/layers/library/mysql/8.0/images/sha256-094a1638b290a1c5d5faa3f06ac2e3ed975947594db4a60aadc58a92e3d0820b)だとmysqldumpslowが使用できない
+  - 私の環境だとライブラリのインストールのためにSSL証明書を設定する必要があり、oraclelinuxだと難しかった...
+- そのため、`bitnami/mysql`のイメージをベースにdstatなど必要なライブラリをインストールしました。
+  - 詳細は`webapp/etc/mysql/docker/Dockerfile`を見てください
+  - やりたいことは以下の通り
+    - arm64（Apple Silicon）対応
+    - mysql8系
+    - OSがDebian系
+    - mysqldumpslowが使える
 
 #### Vagrant
 
