@@ -4,9 +4,7 @@
 # $ docker build -t bitnami/mysql:ssl-certs  --no-cache .
 
 # Use bitnami/mysql as the base image
-# FROM bitnami/mysql
-ARG BASE_IMAGE
-FROM ${BASE_IMAGE}
+FROM bitnami/mysql
 
 # Change user to perform privileged actions
 USER 0
