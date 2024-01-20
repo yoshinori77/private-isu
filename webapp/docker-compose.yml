@@ -1,3 +1,5 @@
+version: "3.8"
+
 name: private-isu
 services:
   nginx:
@@ -5,6 +7,7 @@ services:
     volumes:
       - ./etc/nginx/conf.d:/etc/nginx/conf.d
       - ./public:/public
+      - ./logs/nginx:/var/log/nginx
     ports:
       - "80:80"
     networks:
@@ -12,7 +15,7 @@ services:
 
   app:
     # Go実装の場合は golang/ PHP実装の場合は php/
-    build: ruby/
+    build: golang/
     environment:
       ISUCONP_DB_HOST: mysql
       ISUCONP_DB_PORT: 3306
@@ -28,19 +31,22 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '1'
+          cpus: "1"
           memory: 1g
 
   mysql:
-    image: mysql:8.0
+    image: bitnami/mysql:ssl-certs
     environment:
       #- "TZ=Asia/Tokyo"
       - "MYSQL_ROOT_HOST=%"
       - "MYSQL_ROOT_PASSWORD=root"
+      - ALLOW_EMPTY_PASSWORD=yes
     volumes:
       - mysql:/var/lib/mysql
-      - ./etc/my.cnf:/etc/my.cnf
+      - ./etc/mysql/conf.d/my.cnf:/etc/my.cnf
       - ./sql:/docker-entrypoint-initdb.d
+      - ./logs/mysql:/var/log/mysql
+      - ./scripts:/usr/src/scripts
     ports:
       - "3306:3306"
     networks:
@@ -48,13 +54,17 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '1'
+          cpus: "1"
           memory: 1g
+    # build:
+    #   context: ./etc/mysql/docker/
+    #   dockerfile: Dockerfile
+    # privileged: true
 
   memcached:
     image: memcached:1.6
     networks:
-        - my_network
+      - my_network
 
 volumes:
   mysql:
