@@ -56,11 +56,9 @@ services:
         limits:
           cpus: "1"
           memory: 1g
-    # build:
-    #   context: ./etc/mysql/docker/
-    #   dockerfile: Dockerfile
-    # privileged: true
-
+    build:
+      context: ./etc/mysql/docker/
+      dockerfile: Dockerfile
   memcached:
     image: memcached:1.6
     networks:
